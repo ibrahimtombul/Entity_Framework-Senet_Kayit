@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="KayitDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="OdemeGecmisi">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="senetID" Type="int" Nullable="false" />
+          <Property Name="Vade" Type="int" Nullable="false" />
+          <Property Name="OdemeTarihi" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Senetler">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Aciklama" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Tarih" Type="datetime" Nullable="false" />
+          <Property Name="Vade" Type="int" Nullable="false" />
+          <Property Name="ToplamTutar" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vadeler">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="senetID" Type="int" Nullable="false" />
+          <Property Name="Tarih" Type="datetime" Nullable="false" />
+          <Property Name="Tutar" Type="money" Nullable="false" />
+          <Property Name="VadeNo" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Vadeler_Senetler">
+          <End Role="Senetler" Type="Self.Senetler" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Vadeler" Type="Self.Vadeler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Senetler">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Vadeler">
+              <PropertyRef Name="senetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="KayitDBModelStoreContainer">
+          <EntitySet Name="OdemeGecmisi" EntityType="Self.OdemeGecmisi" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Senetler" EntityType="Self.Senetler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vadeler" EntityType="Self.Vadeler" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Vadeler_Senetler" Association="Self.FK_Vadeler_Senetler">
+            <End Role="Senetler" EntitySet="Senetler" />
+            <End Role="Vadeler" EntitySet="Vadeler" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="KayitDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Senetler">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Aciklama" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Tarih" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Vade" Type="Int32" Nullable="false" />
+          <Property Name="ToplamTutar" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="Vadeler" Relationship="KayitDBModel.FK_Vadeler_Senetler" FromRole="Senetler" ToRole="Vadeler" />
+        </EntityType>
+        <EntityType Name="Vadeler">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="senetID" Type="Int32" Nullable="false" />
+          <Property Name="Tarih" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Tutar" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="VadeNo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Senetler" Relationship="KayitDBModel.FK_Vadeler_Senetler" FromRole="Vadeler" ToRole="Senetler" />
+        </EntityType>
+        <EntityContainer Name="KayitDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Senetler" EntityType="Self.Senetler" />
+          <EntitySet Name="Vadeler" EntityType="Self.Vadeler" />
+          <EntitySet Name="OdemeGecmisi" EntityType="KayitDBModel.OdemeGecmisi" />
+          <AssociationSet Name="FK_Vadeler_Senetler" Association="KayitDBModel.FK_Vadeler_Senetler">
+            <End Role="Senetler" EntitySet="Senetler" />
+            <End Role="Vadeler" EntitySet="Vadeler" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="OdemeGecmisi">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="senetID" Type="Int32" Nullable="false" />
+          <Property Name="Vade" Type="Int32" Nullable="false" />
+          <Property Name="OdemeTarihi" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <Association Name="FK_Vadeler_Senetler">
+          <End Type="KayitDBModel.Senetler" Role="Senetler" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="KayitDBModel.Vadeler" Role="Vadeler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Senetler">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Vadeler">
+              <PropertyRef Name="senetID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="KayitDBModelStoreContainer" CdmEntityContainer="KayitDBEntities">
+          <EntitySetMapping Name="Senetler">
+            <EntityTypeMapping TypeName="KayitDBModel.Senetler">
+              <MappingFragment StoreEntitySet="Senetler">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Aciklama" ColumnName="Aciklama" />
+                <ScalarProperty Name="Tarih" ColumnName="Tarih" />
+                <ScalarProperty Name="Vade" ColumnName="Vade" />
+                <ScalarProperty Name="ToplamTutar" ColumnName="ToplamTutar" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vadeler">
+            <EntityTypeMapping TypeName="KayitDBModel.Vadeler">
+              <MappingFragment StoreEntitySet="Vadeler">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="senetID" ColumnName="senetID" />
+                <ScalarProperty Name="Tarih" ColumnName="Tarih" />
+                <ScalarProperty Name="Tutar" ColumnName="Tutar" />
+                <ScalarProperty Name="VadeNo" ColumnName="VadeNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OdemeGecmisi">
+            <EntityTypeMapping TypeName="KayitDBModel.OdemeGecmisi">
+              <MappingFragment StoreEntitySet="OdemeGecmisi">
+                <ScalarProperty Name="OdemeTarihi" ColumnName="OdemeTarihi" />
+                <ScalarProperty Name="Vade" ColumnName="Vade" />
+                <ScalarProperty Name="senetID" ColumnName="senetID" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
